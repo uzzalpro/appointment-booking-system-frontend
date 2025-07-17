@@ -12,7 +12,7 @@ import UserProfile from './pages/Profile/UserProfile';
 // import Unauthorized from './pages/Unauthorized';
 import DoctorsList from './pages/Admin/DoctorsList';
 import ReportsPage from './pages/Admin/Reports';
-import AppointmentList from './pages/Appointments/AppointmentList';
+import AppointmentList from './pages/Appointments/AppointmentListPatient';
 import ScheduleManager from './pages/Doctor/ScheduleManager';
 
 

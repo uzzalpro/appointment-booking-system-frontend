@@ -6,6 +6,7 @@ import { getReports } from '../../api/reports';
 import DoctorsList from '../Admin/DoctorsList';
 import Reports from '../Admin/Reports';
 import AppointmentListAdmin from '../Appointments/AppointmentListAdmin';
+import DoctorPatientSearch from '../Admin/DoctorPatientSearch';
 import { useAuth } from '../../context/AuthContext';
 
 const AdminDashboard = () => {
@@ -35,6 +36,7 @@ const AdminDashboard = () => {
         <Tab label="Monthly Reports" />
         <Tab label="Doctor Management" />
         <Tab label="All Appointments" />
+        <Tab label="Doctor Patient Search" />
       </Tabs>
       
       {tabValue === 0 && (
@@ -42,6 +44,7 @@ const AdminDashboard = () => {
       )}
       {tabValue === 1 && <DoctorsList />}
       {tabValue === 2 && <AppointmentListAdmin />}
+      {tabValue === 3 && <DoctorPatientSearch />}
     </Box>
   );
 };

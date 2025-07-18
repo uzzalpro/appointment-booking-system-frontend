@@ -11,9 +11,16 @@ export const searchPatients = async (search) => {
   return response.data;
 };
 
-export const searchDoctors = async (keyword) => {
+export const searchDoctors = async (params) => {
   const response = await api.get(`/user-auth/api/v1/doctors/search`, {
-    params: { keyword }
+    params: {
+      specialization: params.specialization,
+      keyword: params.keyword,
+      division: params.division,
+      district: params.district,
+      thana: params.thana,
+      is_available: params.is_available
+    }
   });
   return response.data;
 };

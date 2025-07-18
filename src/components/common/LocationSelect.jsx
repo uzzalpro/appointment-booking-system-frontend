@@ -31,53 +31,92 @@ const LocationSelect = ({ value, onChange }) => {
   }, [value.division, value.district]);
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={4}>
-        <FormControl fullWidth>
-          <InputLabel>Division</InputLabel>
-          <Select
-            value={value.division || ''}
-            label="Division"
-            onChange={(e) => onChange({ ...value, division: e.target.value, district: '', thana: '' })}
-          >
-            {divisions.map(div => (
-              <MenuItem key={div} value={div}>{div}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
-      <Grid item xs={4}>
-        <FormControl fullWidth>
-          <InputLabel>District</InputLabel>
-          <Select
-            value={value.district || ''}
-            label="District"
-            disabled={!value.division}
-            onChange={(e) => onChange({ ...value, district: e.target.value, thana: '' })}
-          >
-            {districts.map(dist => (
-              <MenuItem key={dist} value={dist}>{dist}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
-      <Grid item xs={4}>
-        <FormControl fullWidth>
-          <InputLabel>Thana/Upazila</InputLabel>
-          <Select
-            value={value.thana || ''}
-            label="Thana/Upazila"
-            disabled={!value.district}
-            onChange={(e) => onChange({ ...value, thana: e.target.value })}
-          >
-            {upazilas.map(upa => (
-              <MenuItem key={upa} value={upa}>{upa}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
+  <Grid container spacing={2}>
+    <Grid item xs={12} sm={4}>
+      <FormControl fullWidth sx={{ minWidth: 180 }}>
+        <InputLabel>Division</InputLabel>
+        <Select
+          value={value.division || ''}
+          label="Division"
+          onChange={(e) => onChange({ ...value, division: e.target.value, district: '', thana: '' })}
+          MenuProps={{
+            PaperProps: {
+              style: {
+                maxHeight: 300 // Limit dropdown height
+              }
+            }
+          }}
+        >
+          {divisions.map(div => (
+            <MenuItem 
+              key={div} 
+              value={div}
+              sx={{ whiteSpace: 'normal' }} // Allows text wrapping
+            >
+              {div}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </Grid>
-  );
+    <Grid item xs={12} sm={4}>
+      <FormControl fullWidth sx={{ minWidth: 180 }}>
+        <InputLabel>District</InputLabel>
+        <Select
+          value={value.district || ''}
+          label="District"
+          disabled={!value.division}
+          onChange={(e) => onChange({ ...value, district: e.target.value, thana: '' })}
+          MenuProps={{
+            PaperProps: {
+              style: {
+                maxHeight: 300
+              }
+            }
+          }}
+        >
+          {districts.map(dist => (
+            <MenuItem 
+              key={dist} 
+              value={dist}
+              sx={{ whiteSpace: 'normal' }}
+            >
+              {dist}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
+    <Grid item xs={12} sm={4}>
+      <FormControl fullWidth sx={{ minWidth: 180 }}>
+        <InputLabel>Thana/Upazila</InputLabel>
+        <Select
+          value={value.thana || ''}
+          label="Thana/Upazila"
+          disabled={!value.district}
+          onChange={(e) => onChange({ ...value, thana: e.target.value })}
+          MenuProps={{
+            PaperProps: {
+              style: {
+                maxHeight: 300
+              }
+            }
+          }}
+        >
+          {upazilas.map(upa => (
+            <MenuItem 
+              key={upa} 
+              value={upa}
+              sx={{ whiteSpace: 'normal' }}
+            >
+              {upa}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
+  </Grid>
+);
 };
 
 export default LocationSelect;

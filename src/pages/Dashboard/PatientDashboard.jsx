@@ -1,6 +1,6 @@
 // src/pages/Dashboard/PatientDashboard.jsx
 import { useState, useEffect } from 'react';
-import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip } from '@mui/material';
+import { Box, Typography, Button, Table, Alert, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip } from '@mui/material';
 import { getPatientAppointments, bookAppointment } from '../../api/appointments';
 import { useAuth } from '../../context/AuthContext';
 import BookAppointmentModal from '../Appointments/BookAppointmentModal';
@@ -16,6 +16,7 @@ const PatientDashboard = () => {
   const [appointments, setAppointments] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const { user } = useAuth();
+  const [success, setSuccess] = useState('');
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -36,6 +37,7 @@ const PatientDashboard = () => {
         patient_id: user.id
       });
       setAppointments([...appointments, newAppointment]);
+      setSuccess("Appointment booked successfully!");
       setOpenModal(false);
     } catch (error) {
       console.error('Error booking appointment:', error);
@@ -54,7 +56,7 @@ const PatientDashboard = () => {
       >
         Book New Appointment
       </Button>
-      
+      {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

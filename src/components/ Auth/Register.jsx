@@ -43,9 +43,11 @@ const Register = () => {
     if (formData.password !== formData.confirm_password) newErrors.confirm_password = 'Passwords do not match';
     
     // Mobile format validation
-    if (!formData.mobile.startsWith('+') || !/^\+\d+$/.test(formData.mobile)) {
-      newErrors.mobile = 'Mobile must start with + and contain only digits';
+    if (!/^\+88\d{11}$/.test(formData.mobile)) {
+      newErrors.mobile = 'Mobile number must start with +88 and be exactly 14 digits long';
     }
+
+
     
     // Password complexity validation
     if (formData.password.length < 8) {
@@ -300,17 +302,18 @@ const Register = () => {
                 helperText={errors.consultation_fee}
                 inputProps={{ min: 0 }}
               />
+              <TextField
+                margin="normal"
+                fullWidth
+                name="available_timeslots"
+                label="Available Timeslots (comma separated)"
+                value={formData.available_timeslots}
+                onChange={handleChange}
+              />
             </>
           )}
 
-          <TextField
-            margin="normal"
-            fullWidth
-            name="available_timeslots"
-            label="Available Timeslots (comma separated)"
-            value={formData.available_timeslots}
-            onChange={handleChange}
-          />
+
 
           <Button
             type="submit"

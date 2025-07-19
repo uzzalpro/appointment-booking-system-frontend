@@ -1,6 +1,6 @@
 // src/components/Appointments/BookAppointmentModal.jsx
 import { useState, useEffect } from 'react';
-import { Modal, Box, Typography, TextField, Button, Stack, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Modal, Box, Typography, Alert, TextField, Button, Stack, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { getDoctors} from '../../api/users';
 import {  bookAppointment } from '../../api/appointments';
 
@@ -22,6 +22,8 @@ const BookAppointmentModal = ({ open, onClose, onSubmit }) => {
     appointment_date: '',
     notes: '',
   });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -35,8 +37,18 @@ const BookAppointmentModal = ({ open, onClose, onSubmit }) => {
     fetchDoctors();
   }, []);
 
+useEffect(() => {
+  if (success) {
+    const timer = setTimeout(() => setSuccess(''), 4000);
+    return () => clearTimeout(timer);
+  }
+}, [success]);
+
 const handleSubmit = async (e) => {
   e.preventDefault();
+  setError('');
+  setSuccess('');
+
   try {
     const utcDate = new Date(formData.appointment_date).toISOString();
 
@@ -46,22 +58,34 @@ const handleSubmit = async (e) => {
     };
 
     const response = await bookAppointment(payload);
+
+    
     if (onSubmit) onSubmit(response);
     onClose();
   } catch (error) {
-    console.error('Booking failed:', error);
-    const message = error?.response?.data?.detail || 'Could not book appointment. Check your inputs and try again.';
-    alert(message);  // Show actual backend error
+    const data = error?.response?.data;
+    console.error('Booking failed:', data);
+
+    let err = 'Could not book appointment. Check your inputs and try again.';
+
+    if (Array.isArray(data?.detail)) {
+      const rawMsg = data.detail[0]?.msg || '';
+      err = rawMsg.replace(/^Value error,\s*/i, '').trim();
+    } else if (typeof data?.detail === 'string') {
+      err = data.detail;
+    }
+
+    setError(err);
   }
 };
-
-
 
 
   return (
     <Modal open={open} onClose={onClose}>
       <Box sx={style}>
         <Typography variant="h6" mb={2}>Book New Appointment</Typography>
+              {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+              
         <form onSubmit={handleSubmit}>
           <Stack spacing={2}>
             <FormControl fullWidth>
@@ -74,7 +98,7 @@ const handleSubmit = async (e) => {
               >
                 {doctors.map(doctor => (
                   <MenuItem key={doctor.id} value={doctor.id}>
-                    Dr. {doctor.full_name} - {doctor.specialization} (${doctor.consultation_fee})
+                    Dr. {doctor.full_name} - {doctor.specializations.map((s) => s.specialized).join(', ') || 'General'} ({doctor.available_timeslots})
                   </MenuItem>
                 ))}
               </Select>
